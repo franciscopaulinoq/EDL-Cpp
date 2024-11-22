@@ -1,6 +1,6 @@
 # Estruturas de Dados em C++
 
-Este repositório contém projetos em C++ relacionados a estruturas de dados.
+Este repositório contém projetos em C++ relacionados a estruturas de dados lineares.
 
 ## Estrutura dos Projetos
 
@@ -26,3 +26,26 @@ Cada projeto segue a seguinte estrutura de diretórios:
 2. Compile e execute o projeto usando o Makefile:
     ```bash
     make run
+
+## Compatibilidade do Makefile
+
+O Makefile está configurado para sistemas Windows. Para que funcione no Linux/Mac, faça as seguintes alterações:
+
+- Na variável `TARGET` retire o sufixo ".exe"
+
+- Substitua:
+
+   @if not exist "$(OBJ_DIR)" mkdir "$(OBJ_DIR)"
+   por:
+   @mkdir -p "$(OBJ_DIR)"
+
+   if not exist "$(@D)" mkdir "$(@D)"
+   por:
+   @mkdir -p "$(@D)"
+
+- Ajuste o target `clean` para usar os comandos `rm`:
+
+  ```bash
+  clean:
+	-@rm -rvf "$(OBJ_DIR)"
+	-@rm -vf "$(TARGET)"

@@ -8,9 +8,6 @@ SRC      := $(wildcard source/*.cpp)
 OBJECTS  := $(SRC:source/%.cpp=$(OBJ_DIR)/%.o)
 DEPENDENCIES := $(OBJECTS:.o=.d)
 
-MKDIR = mkdir
-RMDIR = rmdir /S /Q
-
 all: build $(TARGET)
 
 build:
@@ -24,7 +21,7 @@ $(TARGET): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
 clean:
-	@if exist "$(OBJ_DIR)" $(RMDIR) "$(OBJ_DIR)"
+	@if exist "$(OBJ_DIR)" rmdir /S /Q "$(OBJ_DIR)"
 	@if exist "$(TARGET)" del "$(TARGET)"
 
 info:
