@@ -125,7 +125,7 @@ public:
      * @param coef O coeficiente do monômio.
      * @param exp O expoente do monômio.
      */
-    void addMonomio(double coef, int exp);
+    void addMonomio(double coef, double exp);
 
     /**
      * @brief Remove um monômio do polinômio com base no expoente fornecido.

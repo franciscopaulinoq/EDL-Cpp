@@ -1,4 +1,5 @@
 #include <cmath>
+#include <iostream>
 #include <iomanip>
 #include <sstream>
 #include <string>
@@ -164,12 +165,19 @@ Polinomio &Polinomio::operator*=(const Polinomio &outro)
     return *this;
 }
 
-void Polinomio::addMonomio(double coef, int exp)
+void Polinomio::addMonomio(double coef, double exp)
 {
+    if (floor(exp) != exp || exp < 0)
+    {
+        std::ostringstream oss;
+        oss << exp;
+        throw std::invalid_argument("O expoente deve ser um numero inteiro positivo. Valor encontrado: " + oss.str());
+    }
+
     if (coef == 0)
         return;
 
-    No *novoNo = new No(coef, exp);
+    No *novoNo = new No(coef,  static_cast<int>(exp));
 
     addMonomio(novoNo);
 }
@@ -272,13 +280,7 @@ Polinomio Polinomio::parser(std::string linha)
 
     while (ss >> coef >> exp)
     {
-        if (floor(exp) != exp)
-        {
-            std::ostringstream oss;
-            oss << exp;
-            throw std::invalid_argument("Erro: O expoente deve ser um numero inteiro (positivo ou negativo). Valor encontrado: " + oss.str());
-        }
-        polinomio.addMonomio(coef, static_cast<int>(exp));
+        polinomio.addMonomio(coef, exp);
     }
 
     return polinomio;
