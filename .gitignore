@@ -1,0 +1,4 @@
+# Ignorar arquivos gerados pela compilação
+**/objects/
+**/*.exe
+.vscode/
