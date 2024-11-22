@@ -162,7 +162,7 @@ public:
      * @param x O valor de x para a avaliação.
      * @return O valor resultante da avaliação do polinômio.
      */
-    double avaliar(int x) const;
+    double avaliar(double x) const;
 
     /**
      * @brief Converte uma linha em um polinômio.

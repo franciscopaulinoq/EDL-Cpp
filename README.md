@@ -22,10 +22,12 @@ Cada projeto segue a seguinte estrutura de diretórios:
 1. Entre na pasta do projeto desejado:
    ```bash
    cd NomeDoProjeto
+   ```
 
 2. Compile e execute o projeto usando o Makefile:
     ```bash
     make run
+    ```
 
 ## Compatibilidade do Makefile
 
@@ -49,3 +51,4 @@ O Makefile está configurado para sistemas Windows. Para que funcione no Linux/M
   clean:
 	-@rm -rvf "$(OBJ_DIR)"
 	-@rm -vf "$(TARGET)"
+   ```

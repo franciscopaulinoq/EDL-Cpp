@@ -5,5 +5,7 @@ Este projeto implementa uma estrutura de lista encadeada em C++. Ele permite rea
 ## Como Compilar e Executar
 
 1. Compile e execute o projeto:
+
    ```bash
    make run
+   ```

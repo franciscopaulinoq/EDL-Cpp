@@ -258,7 +258,7 @@ int Polinomio::obterTamanho() const
     return tamanho;
 }
 
-double Polinomio::avaliar(int x) const
+double Polinomio::avaliar(double x) const
 {
     double sum = 0.0;
     No *atual = inicio;
