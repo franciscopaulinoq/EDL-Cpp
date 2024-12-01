@@ -2,7 +2,7 @@ CXX      := g++
 CXXFLAGS := -g3 -pedantic-errors -Wall -Wextra -Werror
 LDFLAGS  := -L/usr/lib -lstdc++ -lm
 OBJ_DIR  := ./objects
-TARGET   := CppListaEncadeada.exe
+TARGET   := LinkedList.exe
 INCLUDE  := -Iinclude/
 SRC      := $(wildcard source/*.cpp)
 OBJECTS  := $(SRC:source/%.cpp=$(OBJ_DIR)/%.o)
@@ -31,7 +31,7 @@ info:
 	@echo "[*] Dependencies:    $(DEPENDENCIES)"
 
 run: all
-	@echo "Executando..."
+	@echo "Run..."
 	@echo.
 	@$(TARGET) $(ARGS)
 

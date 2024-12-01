@@ -14,8 +14,8 @@ Cada projeto segue a seguinte estrutura de diretórios:
 
 ## Projetos Disponíveis
 
-1. [CppListaEncadeada](./CppListaEncadeada/README.md)
-2. [Polinomio](./Polinomio/README.md)
+1. [LinkedList](./LinkedList/README.md)
+2. [Polynomial](./Polynomial/README.md)
 
 ## Como Usar
 
@@ -28,6 +28,14 @@ Cada projeto segue a seguinte estrutura de diretórios:
     ```bash
     make run
     ```
+3. Execute o projeto com a opção -C:  
+
+   Se você não quiser entrar na pasta do projeto, pode usar a opção -C do make, que permite especificar o diretório onde o Makefile está localizado. Por exemplo:
+
+   ```bash
+    make -C NomeDoProjeto run
+    ```
+
 
 ## Compatibilidade do Makefile
 
