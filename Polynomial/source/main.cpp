@@ -1,11 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "Polinomio.h"
+#include "Polynomial.h"
 
 using namespace std;
-
-#include <regex>
 
 int main()
 {
@@ -40,10 +38,10 @@ int main()
                     continue;
                 }
 
-                Polinomio polinomio1 = Polinomio::parser(pol1);
-                Polinomio polinomio2 = Polinomio::parser(pol2);
+                Polynomial polinomio1 = Polynomial::parser(pol1);
+                Polynomial polinomio2 = Polynomial::parser(pol2);
 
-                Polinomio resultado;
+                Polynomial resultado;
 
                 if (index == "+")
                 {
@@ -70,8 +68,8 @@ int main()
                     continue;
                 }
 
-                Polinomio polinomio = Polinomio::parser(pol);
-                cout << "Grau do polinomio: " << polinomio.obterGrau() << endl;
+                Polynomial polinomio = Polynomial::parser(pol);
+                cout << "Grau do polinomio: " << polinomio.degree() << endl;
             }
             else if (index == "t" || index == "T")
             {
@@ -82,8 +80,8 @@ int main()
                     continue;
                 }
 
-                Polinomio polinomio = Polinomio::parser(pol);
-                cout << "Termos do polinomio: " << polinomio.obterTamanho() << endl;
+                Polynomial polinomio = Polynomial::parser(pol);
+                cout << "Termos do polinomio: " << polinomio.size() << endl;
             }
             else if (index == "a" || index == "A")
             {
@@ -111,8 +109,8 @@ int main()
                     continue;
                 }
 
-                Polinomio polinomio = Polinomio::parser(pol);
-                cout << "Avaliacao do polinomio com x = " << valor << ": " << polinomio.avaliar(valor) << endl;
+                Polynomial polinomio = Polynomial::parser(pol);
+                cout << "Avaliacao do polinomio com x = " << valor << ": " << polinomio.evaluate(valor) << endl;
             }
             else if (index == "p" || index == "P")
             {
@@ -123,7 +121,7 @@ int main()
                     continue;
                 }
 
-                Polinomio polinomio = Polinomio::parser(pol);
+                Polynomial polinomio = Polynomial::parser(pol);
                 cout << "Polinomio: " << polinomio << endl;
             }
             else

@@ -2,7 +2,7 @@ CXX      := g++
 CXXFLAGS := -g3 -pedantic-errors -Wall -Wextra -Werror
 LDFLAGS  := -L/usr/lib -lstdc++ -lm
 OBJ_DIR  := ./objects
-TARGET   := Polinomio.exe
+TARGET   := Polynomial.exe
 INCLUDE  := -Iinclude/
 SRC      := $(wildcard source/*.cpp)
 OBJECTS  := $(SRC:source/%.cpp=$(OBJ_DIR)/%.o)
