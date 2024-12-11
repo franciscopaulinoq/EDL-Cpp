@@ -16,6 +16,7 @@ Cada projeto segue a seguinte estrutura de diretórios:
 
 1. [LinkedList](./LinkedList/README.md)
 2. [Polynomial](./Polynomial/README.md)
+3. [HashTable](./HashTable/README.md)
 
 ## Como Usar
 
