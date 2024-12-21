@@ -1,4 +1,4 @@
-# Polinomio
+# Polynomial
 
 Este projeto implementa uma estrutura para manipulação de polinômios em C++ com base no conceito de lista encadeada. Ele suporta operações matemáticas, como soma, subtração e multiplicação, além de avaliar o polinômio para valores específicos. A entrada de dados ocorre por meio de um arquivo `.txt`.
 
