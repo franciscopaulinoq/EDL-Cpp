@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string>
 #include <thread>
+#include <windows.h>
 #include <chrono>
 #include <vector>
 #include "Stack.h"
@@ -45,25 +46,42 @@ bool temAbaixo(Cell currentCell, char **mat) {
 }
 
 void printMaze(char** matrix, int line, int col) {
+    string test = "";
     for (int i = 0; i < line; i++)
     {
         for (int j = 0; j < col; j++)
         {
             if (matrix[i][j] == '1')
-            {
-                cout << "#" << " ";
+            {   
+                test = test + "# ";
+                // cout << "#" << " ";
             }
             else if (matrix[i][j] == '0')
             {
-                cout << " " << " ";
+                test = test + "  ";
+                // cout << " " << " ";
+            }
+            else if (matrix[i][j] == '.') {
+                test = test + "  ";
             }
             else
             {
-                cout << matrix[i][j] << " ";
+                test = test + matrix[i][j] + " ";
+                // cout << matrix[i][j] << " ";
             }
         }
-        cout << endl;
+        test = test + "\n";
+        // cout << endl;
     }
+    cout << test;
+}
+
+void ClearScreen()
+{	
+COORD cursorPosition;	
+cursorPosition.X = 0;	
+cursorPosition.Y = 0;	
+SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cursorPosition);
 }
 
 int main()
@@ -130,6 +148,8 @@ int main()
     // cout << "Tamanho apos pop: " << pilhaP.size() << endl;
     // cout << "Topo apos pop - Nome: " << pilhaP.top().name << ", Idade: " << pilhaP.top().age << endl;
 
+    system("cls");
+
     ifstream arquivo("resources/input.txt");
     if (!arquivo.is_open())
     {
@@ -194,11 +214,11 @@ int main()
 
     Stack<Cell> testPilha;
 
-    system("cls");
+    ClearScreen();
     printMaze(matrix, line, col);
     this_thread::sleep_for(std::chrono::milliseconds(500));
 
-    while (!(currentCell.line == exitCell.line) || !(currentCell.col == exitCell.col))
+    while ((!(currentCell.line == exitCell.line) || !(currentCell.col == exitCell.col)))
     {
         if (temAbaixo(currentCell, matrix)) {
             testPilha.emplace(currentCell.line + 1, currentCell.col);
@@ -225,7 +245,7 @@ int main()
         testPilha.pop();
         matrix[currentCell.line][currentCell.col] = 'm';
 
-        system("cls");
+        ClearScreen();
         printMaze(matrix, line, col);
         this_thread::sleep_for(std::chrono::milliseconds(500));
 
