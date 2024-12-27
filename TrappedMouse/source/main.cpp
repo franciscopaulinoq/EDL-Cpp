@@ -4,17 +4,10 @@
 #include <string>
 #include <thread>
 #include <windows.h>
+#include "Cell.h"
 #include "Stack.h"
 
 using namespace std;
-
-struct Cell
-{
-    int line;
-    int col;
-
-    Cell(int l = 0, int c = 0) : line(l), col(c) {}
-};
 
 bool isValidMove(int line, int col, char **matrix)
 {
@@ -68,8 +61,8 @@ void movePlayer(char **matrix, Cell &currentCell, Stack<Cell> &cellStack)
 
     for (auto &dir : directions)
     {
-        int newLine = currentCell.line + dir[0];
-        int newCol = currentCell.col + dir[1];
+        int newLine = currentCell.getX() + dir[0];
+        int newCol = currentCell.getY() + dir[1];
         if (isValidMove(newLine, newCol, matrix))
         {
             cellStack.emplace(newLine, newCol);
@@ -144,21 +137,21 @@ int main()
     ShowConsoleCursor(false);
     printMaze(matrix, line, col);
 
-    while (!(currentCell.line == exitCell.line && currentCell.col == exitCell.col) && !cellStack.empty())
+    while (!(currentCell == exitCell) && !cellStack.empty())
     {
         movePlayer(matrix, currentCell, cellStack);
 
-        matrix[currentCell.line][currentCell.col] = '.';
+        matrix[currentCell.getX()][currentCell.getY()] = '.';
         currentCell = cellStack.top();
         cellStack.pop();
-        matrix[currentCell.line][currentCell.col] = 'm';
+        matrix[currentCell.getX()][currentCell.getY()] = 'm';
 
         clearScreen();
         printMaze(matrix, line, col);
         this_thread::sleep_for(chrono::milliseconds(500));
     }
 
-    if (currentCell.line == exitCell.line && currentCell.col == exitCell.col)
+    if (currentCell == exitCell)
     {
         cout << "\033[1;32m\nSAIDA ENCONTRADA!\033[0m" << endl;
     }
