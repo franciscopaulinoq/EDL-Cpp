@@ -1,195 +1,101 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include <stdio.h>
-#include <stdlib.h>
 #include <string>
 #include <thread>
 #include <windows.h>
-#include <chrono>
-#include <vector>
 #include "Stack.h"
 
 using namespace std;
-
-struct Person
-{
-    string name;
-    int age;
-
-    Person(const string &n, int a) : name(n), age(a) {}
-};
 
 struct Cell
 {
     int line;
     int col;
 
-    Cell() : line(0), col(0) {}
-    Cell(int l, int c) : line(l), col(c) {}
+    Cell(int l = 0, int c = 0) : line(l), col(c) {}
 };
 
-bool temDireita(Cell currentCell, char **mat) {
-    return mat[currentCell.line][currentCell.col + 1] == '0' || mat[currentCell.line][currentCell.col + 1] == 'e';
+bool isValidMove(int line, int col, char **matrix)
+{
+    return matrix[line][col] == '0' || matrix[line][col] == 'e';
 }
 
-bool temEsquerda(Cell currentCell, char **mat) {
-    return mat[currentCell.line][currentCell.col - 1] == '0' || mat[currentCell.line][currentCell.col - 1] == 'e';
-}
-
-bool temAcima(Cell currentCell, char **mat) {
-    return mat[currentCell.line - 1][currentCell.col] == '0' || mat[currentCell.line - 1][currentCell.col] == 'e';
-}
-
-bool temAbaixo(Cell currentCell, char **mat) {
-    return mat[currentCell.line + 1][currentCell.col] == '0' || mat[currentCell.line + 1][currentCell.col] == 'e';
-}
-
-void printMaze(char** matrix, int line, int col) {
-    string test = "";
+void printMaze(char **matrix, int line, int col)
+{
     for (int i = 0; i < line; i++)
     {
         for (int j = 0; j < col; j++)
         {
-            if (matrix[i][j] == '1')
-            {   
-                test = test + "# ";
-                // cout << "#" << " ";
-            }
-            else if (matrix[i][j] == '0')
+            switch (matrix[i][j])
             {
-                test = test + "  ";
-                // cout << " " << " ";
-            }
-            else if (matrix[i][j] == '.') {
-                test = test + "  ";
-            }
-            else
-            {
-                test = test + matrix[i][j] + " ";
-                // cout << matrix[i][j] << " ";
+            case '1':
+                cout << "# ";
+                break;
+            case 'm':
+                cout << "\033[1;32mM\033[0m ";
+                break;
+            case 'e':
+                cout << "\033[1;33mE\033[0m ";
+                break;
+            default:
+                cout << "  ";
+                break;
             }
         }
-        test = test + "\n";
-        // cout << endl;
+        cout << "\n";
     }
-    cout << test;
 }
 
-void ClearScreen()
-{	
-COORD cursorPosition;	
-cursorPosition.X = 0;	
-cursorPosition.Y = 0;	
-SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cursorPosition);
-}
-
-int main()
+void clearScreen()
 {
-    // Stack<double> pilhaD;
+    COORD cursorPosition = {0, 0};
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cursorPosition);
+}
 
-    // pilhaD.push(10.4);
-    // pilhaD.push(20.2);
-    // pilhaD.push(30.5);
+void ShowConsoleCursor(bool showFlag)
+{
+    HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO cursorInfo;
+    GetConsoleCursorInfo(out, &cursorInfo);
+    cursorInfo.bVisible = showFlag;
+    SetConsoleCursorInfo(out, &cursorInfo);
+}
 
-    // cout << "Tamanho apos insercoes: " << pilhaD.size() << endl;
-    // cout << "Topo da pilha de doubles: " << pilhaD.top() << endl;
+void movePlayer(char **matrix, Cell &currentCell, Stack<Cell> &cellStack)
+{
+    const int directions[4][2] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
-    // pilhaD.pop();
-    // cout << "Tamanho apos pop: " << pilhaD.size() << endl;
-    // cout << "Topo apos pop: " << pilhaD.top() << endl;
+    for (auto &dir : directions)
+    {
+        int newLine = currentCell.line + dir[0];
+        int newCol = currentCell.col + dir[1];
+        if (isValidMove(newLine, newCol, matrix))
+        {
+            cellStack.emplace(newLine, newCol);
+        }
+    }
+}
 
-    // pilhaD.pop();
-    // pilhaD.pop();
-
-    // cout << "Tamanho apos remocoes: " << pilhaD.size() << endl;
-
-    // try
-    // {
-    //     pilhaD.pop();
-    // }
-    // catch (const exception &e)
-    // {
-    //     cout << "Erro: " << e.what() << endl;
-    // }
-
-    // pilhaD.emplace(40.7);
-    // pilhaD.emplace(50.1);
-
-    // cout << "Tamanho apos emplace: " << pilhaD.size() << endl;
-    // cout << "Topo apos emplace: " << pilhaD.top() << endl;
-
-    // Stack<double> pilhaTemp;
-    // pilhaTemp.push(60.9);
-    // pilhaTemp.push(70.3);
-    // pilhaTemp.push(80.7);
-
-    // cout << "\nAntes do swap:" << endl;
-    // cout << "Pilha original - Topo: " << pilhaD.top() << ", Tamanho: " << pilhaD.size() << endl;
-    // cout << "Pilha temporaria - Topo: " << pilhaTemp.top() << ", Tamanho: " << pilhaTemp.size() << endl;
-
-    // pilhaD.swap(pilhaTemp);
-
-    // cout << "\nApos o swap:" << endl;
-    // cout << "Pilha original - Topo: " << pilhaD.top() << ", Tamanho: " << pilhaD.size() << endl;
-    // cout << "Pilha temporaria - Topo: " << pilhaTemp.top() << ", Tamanho: " << pilhaTemp.size() << endl;
-
-    // Stack<Person> pilhaP;
-
-    // pilhaP.emplace("John Doe", 30);
-    // pilhaP.emplace("Jane Smith", 25);
-
-    // cout << endl;
-
-    // cout << "Tamanho apos emplace: " << pilhaP.size() << endl;
-    // cout << "Topo da pilha - Nome: " << pilhaP.top().name << ", Idade: " << pilhaP.top().age << endl;
-
-    // pilhaP.pop();
-    // cout << "Tamanho apos pop: " << pilhaP.size() << endl;
-    // cout << "Topo apos pop - Nome: " << pilhaP.top().name << ", Idade: " << pilhaP.top().age << endl;
-
-    system("cls");
-
-    ifstream arquivo("resources/input.txt");
+bool loadMaze(const string &filename, char **&matrix, int &line, int &col, Cell &start, Cell &exit)
+{
+    ifstream arquivo(filename);
     if (!arquivo.is_open())
     {
-        cerr << "Erro ao abrir o arquvio de entrada.\n";
-        return 1;
+        cerr << "Erro ao abrir o arquivo de entrada.\n";
+        return false;
     }
 
     string linha;
-    int line, col;
-
     getline(arquivo, linha);
-
     stringstream ss(linha);
     ss >> line >> col;
 
-    char **matrix = (char **)malloc(line * sizeof(char *));
-    if (matrix == NULL)
-    {
-        perror("Erro ao alocar memoria para as linhas");
-        return EXIT_FAILURE;
-    }
-
+    matrix = new char *[line];
     for (int i = 0; i < line; i++)
     {
-        matrix[i] = (char *)malloc(col * sizeof(char));
-        if (matrix[i] == NULL)
-        {
-            perror("Erro ao alocar memoria para uma coluna");
-            for (int j = 0; j < i; j++)
-            {
-                free(matrix[i]);
-            }
-            free(matrix);
-            return EXIT_FAILURE;
-        }
+        matrix[i] = new char[col];
     }
-
-    char valor;
-    Cell currentCell;
-    Cell exitCell;
 
     for (int i = 0; i < line; i++)
     {
@@ -197,68 +103,75 @@ int main()
         stringstream ss(linha);
         for (int j = 0; j < col; j++)
         {
+            char valor;
             ss >> valor;
+
+            if (valor != '0' && valor != '1' && valor != 'm' && valor != 'e')
+            {
+                cerr << "Invalid value found: " << valor << " at position (" << i << ", " << j << ")\n";
+                return false;
+            }
+
             if (valor == 'm')
             {
-                currentCell.line = i;
-                currentCell.col = j;
+                start = Cell(i, j);
             }
             else if (valor == 'e')
             {
-                exitCell.line = i;
-                exitCell.col = j;
+                exit = Cell(i, j);
             }
             matrix[i][j] = valor;
         }
     }
+    return true;
+}
 
-    Stack<Cell> testPilha;
+int main()
+{
+    char **matrix;
+    int line, col;
+    Cell currentCell, exitCell;
 
-    ClearScreen();
-    printMaze(matrix, line, col);
-    this_thread::sleep_for(std::chrono::milliseconds(500));
-
-    while ((!(currentCell.line == exitCell.line) || !(currentCell.col == exitCell.col)))
+    if (!loadMaze("resources/input.txt", matrix, line, col, currentCell, exitCell))
     {
-        if (temAbaixo(currentCell, matrix)) {
-            testPilha.emplace(currentCell.line + 1, currentCell.col);
-        }
-
-        if (temAcima(currentCell, matrix)) {
-            testPilha.emplace(currentCell.line -1, currentCell.col);
-        }
-
-        if (temEsquerda(currentCell, matrix)) {
-            testPilha.emplace(currentCell.line, currentCell.col - 1);
-        }
-
-        if (temDireita(currentCell, matrix)) {
-            testPilha.emplace(currentCell.line, currentCell.col + 1);
-        }
-
-        // break;
-
-        matrix[currentCell.line][currentCell.col] = '.';
-        // cout << "Caminho: (" << testPilha.top().line << ", " << testPilha.top().col << ")" << endl;
-        currentCell.line = testPilha.top().line;
-        currentCell.col = testPilha.top().col;
-        testPilha.pop();
-        matrix[currentCell.line][currentCell.col] = 'm';
-
-        ClearScreen();
-        printMaze(matrix, line, col);
-        this_thread::sleep_for(std::chrono::milliseconds(500));
-
+        return 1;
     }
 
-    // while (!testPilha.empty()) {
-    //     cout << "Caminho: (" << testPilha.top().line << ", " << testPilha.top().col << ")" << endl;
-    //     testPilha.pop();
-    // }
+    Stack<Cell> cellStack;
+    cellStack.push(currentCell);
 
-    // cout << "Current position: (" << currentCell.line << ", " << currentCell.col << ")" << endl;
+    system("cls");
+    ShowConsoleCursor(false);
+    printMaze(matrix, line, col);
 
-    free(matrix);
+    while (!(currentCell.line == exitCell.line && currentCell.col == exitCell.col) && !cellStack.empty())
+    {
+        movePlayer(matrix, currentCell, cellStack);
+
+        matrix[currentCell.line][currentCell.col] = '.';
+        currentCell = cellStack.top();
+        cellStack.pop();
+        matrix[currentCell.line][currentCell.col] = 'm';
+
+        clearScreen();
+        printMaze(matrix, line, col);
+        this_thread::sleep_for(chrono::milliseconds(500));
+    }
+
+    if (currentCell.line == exitCell.line && currentCell.col == exitCell.col)
+    {
+        cout << "\033[1;32m\nSAIDA ENCONTRADA!\033[0m" << endl;
+    }
+    else
+    {
+        cout << "\033[1;31m\nNAO HA SAIDA POSSIVEL!\033[0m" << endl;
+    }
+
+    for (int i = 0; i < line; i++)
+    {
+        delete[] matrix[i];
+    }
+    delete[] matrix;
 
     return 0;
 }
