@@ -29,8 +29,6 @@ public:
 
     bool loadFromFile(const std::string &filename);
 
-    friend std::ostream &operator<<(std::ostream &os, const Maze &maze);
-
     void exitMaze();
 };
 
@@ -96,6 +94,18 @@ bool Maze::loadFromFile(const std::string &filename)
         }
     }
 
+    if (entryCell == Cell())
+    {
+        std::cerr << "Character 'm' not found in text file\n";
+        return false;
+    }
+
+    if (exitCell == Cell())
+    {
+        std::cerr << "Character 'e' not found in text file\n";
+        return false;
+    }
+
     currentCell = entryCell;
     return true;
 }
@@ -147,14 +157,14 @@ void Maze::exitMaze()
 
     while (!(currentCell == exitCell) && !mazeStack.empty())
     {
-        const int directions[4][2] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        const int directions[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
         for (auto &dir : directions)
         {
             int newLine = currentCell.getX() + dir[0];
             int newCol = currentCell.getY() + dir[1];
             if (isValidMove(newLine, newCol))
             {
-                mazeStack.push(Cell(newLine, newCol));
+                mazeStack.emplace(newLine, newCol);
             }
         }
 
@@ -174,11 +184,11 @@ void Maze::exitMaze()
 
     if (currentCell == exitCell)
     {
-        std::cout << "\033[1;32m\nSAIDA ENCONTRADA!\033[0m" << std::endl;
+        std::cout << "\nSAIDA ENCONTRADA!" << std::endl;
     }
     else
     {
-        std::cout << "\033[1;31m\nNAO HA SAIDA POSSIVEL!\033[0m" << std::endl;
+        std::cout << "\nSEM SAIDA POSSIVEL!" << std::endl;
     }
 }
 
